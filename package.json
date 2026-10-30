@@ -1,0 +1,47 @@
+{
+  "name": "dsh-revive",
+  "description": "Session replay & revive for dsh: a conversation view that replays any session turn-by-turn (cursor playback) and one-click revives the original prompt chain into a brand-new session. Pure-consumer client plugin — no host routes, official slots protocol only.",
+  "version": "0.1.4",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zxsimple/dsh-revive.git"
+  },
+  "homepage": "https://github.com/zxsimple/dsh-revive#readme",
+  "bugs": {
+    "url": "https://github.com/zxsimple/dsh-revive/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "session-replay",
+    "conversation-view"
+  ]
+}
