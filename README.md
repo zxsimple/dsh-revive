@@ -51,6 +51,15 @@ profile 的 `package.json`：
 
 然后 `pnpm install`（link 依赖会建符号链接）+ **完全重启应用**（boot 时才会重新组装 loader 行与 client 模块）。
 
+也可以直接从仓库安装：
+
+```bash
+git clone https://github.com/zxsimple/dsh-revive.git
+# 然后把上面的 link: 指向 clone 下来的目录
+```
+
+> 关键点：纯 client 插件也必须声明 `dsh.bundle.patch` 并出现在 `dsh.profile.bundles` 里，否则宿主不会为它生成 loader 行（详见下一节）。
+
 ## 为什么必须是 bundle：0.1.0 的「没有按钮」根因
 
 1. **package.json 缺 `dsh.bundle.patch`**。插件目录里虽然有 `cordis.patch.yml`，但没有声明它，宿主就永远不会把这条 insert 行并入 loader 树 → 没有 loader 行 → 没有 Node 半边 fiber → `plugins/??` 里根本没有 `dsh-revive/client.js` → 视图切换器自然没有「回放」。dshmarket 自己的校验也会报同一句话：`bundle declares no dsh.bundle.patch — the profile will fail to boot`。
