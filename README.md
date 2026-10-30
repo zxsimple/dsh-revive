@@ -60,6 +60,27 @@ git clone https://github.com/zxsimple/dsh-revive.git
 
 > 关键点：纯 client 插件也必须声明 `dsh.bundle.patch` 并出现在 `dsh.profile.bundles` 里，否则宿主不会为它生成 loader 行（详见下一节）。
 
+## 平台支持
+
+纯 client 插件，运行在 DSH 的 Web 前端里，**不含任何与操作系统相关的代码**：没有 `fs` / `path` / `child_process`，没有 `process` / `__dirname`，没有绝对路径拼接，也没有构建脚本与原生依赖（`pnpm install` 对它只是建一个符号链接）。所以平台跟随 DSH 的 Web 客户端。
+
+| 平台 | 状态 |
+|---|---|
+| macOS（DSH 桌面版 0.2.1-rc.3） | **已实测**：视图注册、流式变速、输入后停顿、canvas 录制全部验证通过 |
+| Windows | 预期可用（**未实测**）。DSH 随包提供 `node.cmd` 与 `command-path.ps1`，插件市场也有完整的 `win32` 分支（`link:` 依赖走 junction、`npm.cmd` / `pnpm.cmd`）；插件侧没有需要移植的部分 |
+| Linux | 同理，未实测 |
+
+用到的浏览器能力都是 Chromium 内置的，Windows 上的 Electron / Chromium 同样具备：
+
+- `MediaRecorder` + `canvas.captureStream()` —— 录制走 VP9/VP8 WebM，Windows 的 Chromium 支持；产物用系统播放器或浏览器都能播；
+- `localStorage`（速度与时长记忆）、`navigator.language`（中英文案）；
+- 录制画布的字体栈包含 `Microsoft YaHei`，中文在 Windows 上不会掉字；
+- 滚动容器靠 `getComputedStyle` 向上查找，不依赖任何平台布局常量。
+
+Windows 上唯一的注意点：`link:` 依赖建的是 junction，如果手改过 profile 的 `package.json`，重启前先确认 `node_modules/dsh-revive` 指向正确。
+
+如果你在 Windows 上跑出了问题（比如录制拿不到 `video/webm`，只剩 `video/mp4`），把控制台报错贴到 issue 里即可。
+
 ## 为什么必须是 bundle：0.1.0 的「没有按钮」根因
 
 1. **package.json 缺 `dsh.bundle.patch`**。插件目录里虽然有 `cordis.patch.yml`，但没有声明它，宿主就永远不会把这条 insert 行并入 loader 树 → 没有 loader 行 → 没有 Node 半边 fiber → `plugins/??` 里根本没有 `dsh-revive/client.js` → 视图切换器自然没有「回放」。dshmarket 自己的校验也会报同一句话：`bundle declares no dsh.bundle.patch — the profile will fail to boot`。
