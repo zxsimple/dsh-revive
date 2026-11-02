@@ -42,7 +42,15 @@ DSH 会话视图切换器里新增**「回放」**视图（与「对话」「轨
 
 ## 安装
 
-profile 的 `package.json`：
+已收录到 DSH 插件目录（分类 **Sessions & Messages**），在 dsh 的**插件市场**里搜 `dsh-revive` 即可安装；目录条目页：<https://awesome-dsh-plugin.com/p/zxsimple/dsh-revive/>
+
+也可以一条命令从仓库装：
+
+```bash
+dsh plugin --profile web add github:zxsimple/dsh-revive
+```
+
+手工挂载（本地开发）则改 profile 的 `package.json`：
 
 ```jsonc
 "dependencies": { "dsh-revive": "link:/path/to/dsh-revive" },
