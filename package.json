@@ -29,7 +29,6 @@
     "lib/client.js",
     "cordis.patch.yml",
     "README.md",
-    "README.en.md",
     "LICENSE"
   ],
   "license": "MIT",
