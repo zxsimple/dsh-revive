@@ -8,6 +8,18 @@ Adds a **Replay** view to the DSH conversation view switcher, alongside **Chat**
 - **One-click re-run**: sends the session's original user prompts, in order, into a **new session** through the official `uiWorkspace.connectWorkspace` + `session.prompt` path, so tools execute again for real;
 - **Conversation recording**: paints the replay (the conversation content itself) frame by frame onto a 1280×720 canvas and captures it with `MediaRecorder` into a `.webm` (VP9), downloaded automatically — no window or screen-recording permission involved.
 
+## Interface (0.2.0)
+
+Rendered with the host's own UI kit so it reads like the native surface, with clearer information layering on top:
+
+- **Assistant prose and user messages** go through the same Markdown renderer the host uses (tables, lists, links, inline code and syntax-highlighted code blocks all render), and stay well-formed while streaming;
+- **Reasoning and tool calls fold into one row by default**: reasoning shows `● Reasoning · N chars · first line`, a tool call shows `⚒ tool · the arguments it actually ran` (e.g. `bash` followed by the command); click to expand;
+- **Tool results** carry a status in the folded row — `✓ done` / `✕ failed` / `running` — with a one-line preview of the output;
+- Folding does **not** stop the stream: the folded line keeps growing with the tail of the text, so the typewriter effect survives collapsing;
+- Turn separators became a hairline with a centred label, prose is capped at 900px, and the caret blinks.
+
+If the host kit is unavailable (a different DSH version), rendering falls back to plain text instead of going blank.
+
 ## Replay pacing (0.1.3)
 
 - **Cost-budget clock (per-kind speed)**: every text in a turn is flattened into `segments` (user / reasoning / prose / tool call / tool output) that share one "cost budget" cursor. **Each kind spends a different amount of cost per character**, so one clock produces different speeds:

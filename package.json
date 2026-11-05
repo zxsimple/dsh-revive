@@ -1,7 +1,7 @@
 {
   "name": "dsh-revive",
   "description": "Session replay & revive for dsh: a conversation view that replays any session turn-by-turn (cursor playback) and one-click revives the original prompt chain into a brand-new session. Pure-consumer client plugin — no host routes, official slots protocol only.",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -18,6 +18,9 @@
       "patch": "./cordis.patch.yml"
     },
     "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-primitives"
+      ],
       "platform": "web"
     }
   },
